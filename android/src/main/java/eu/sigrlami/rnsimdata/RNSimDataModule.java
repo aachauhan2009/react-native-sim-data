@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.List;
 
 import android.content.Context;
-import android.telephony.TelephonyManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 
@@ -34,7 +33,6 @@ public class RNSimDataModule extends ReactContextBaseJavaModule {
     final Map<String, Object> constants = new HashMap<>();
 
     try {
-      TelephonyManager telManager = (TelephonyManager) this.reactContext.getSystemService(Context.TELEPHONY_SERVICE);
 
       SubscriptionManager manager = (SubscriptionManager) this.reactContext.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
       List<SubscriptionInfo> subscriptionInfos = manager.getActiveSubscriptionInfoList();
@@ -51,20 +49,15 @@ public class RNSimDataModule extends ReactContextBaseJavaModule {
         String number            = subInfo.getNumber();
         int simSlotIndex         = subInfo.getSimSlotIndex();
         int subscriptionId       = subInfo.getSubscriptionId();
-        boolean networkRoaming   = telManager.isNetworkRoaming();
-        String deviceId          = telManager.getDeviceId(simSlotIndex);
-        //String deviceId          = telManager.getImei(simSlotIndex) || telManager.getMeid(simSlotIndex);
 
         constants.put("carrierName" + sub, carrierName.toString());
         constants.put("displayName" + sub, displayName.toString());
         constants.put("countryCode" + sub, countryIso);
         constants.put("mcc" + sub, mcc);
         constants.put("mnc" + sub, mnc);
-        constants.put("isNetworkRoaming" + sub, networkRoaming);
         constants.put("isDataRoaming"    + sub, (dataRoaming == 1));
         constants.put("simSlotIndex"     + sub, simSlotIndex);
         constants.put("phoneNumber"      + sub, number);
-        constants.put("deviceId"         + sub, deviceId);
         constants.put("simSerialNumber"  + sub, iccId);
         constants.put("subscriptionId"   + sub, subscriptionId);
         sub++;
